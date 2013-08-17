@@ -77,4 +77,11 @@ class IPViking():
         headers = response.headers
         content = response.content
         data = Response_Data(content)
-        return headers, data
+        self.responsedata = data
+        self.responseheader = headers
+        self.responsecontent = content
+        return True
+    
+    def get_dict(self):
+        return self.responsedata.to_dict()
+        

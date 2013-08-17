@@ -16,6 +16,23 @@ REQUIRED_PARAMS = ['apikey',
                    'method',
                    'ip']
 
+ALL_PARAMS = ['apikey', #Required. API Key provided by Norse.
+              'method', #Required. Norse access method (eg ipq, submission, etc).
+              'ip', #Required. IP address.
+              'transID', #Optional. User-supplied transaction ID for client-side processing.
+              'clientID', #Optional. User-supplied client ID for client-side processing.
+              'customID', #Optional. User-supplied custom ID for client-side processing.
+              'address', #Optional. Street address for GeoMatch feature.
+              'city', #Optional. City for GeoMatch feature.
+              'zip', #Optional. ZIP for GeoMatch feature.
+              'state', #Optional. State for GeoMatch feature.
+              'country', #Optional. Country for GeoMatch feature.
+              'categories', #Optional. Comma-separated list of categories to filter by. Defaults to pull all entries.
+              'options', #Optional. Pipe-separated ("|") list of options for API behavior. 
+              'protocol', #Optional. For PUT requests.
+              'category', #Optional.  For PUT requests.
+              'timestamp'] #Optional. Unix timestamp for PUT requests.
+
 CATEGORIES = {  '1':'Explicit Content',
                 '2':'Bogon Unadv',
                 '3':'Bogon Unass',

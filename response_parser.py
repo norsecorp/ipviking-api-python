@@ -12,7 +12,6 @@ class Response_Data():
     """Data structure built from IPQ response. Attributes assigned directly from response."""
     response = None #string: raw response
     resp_dict = None #dict: response processed into layered dict
-    fields = None #list: field names populated from response
     unrecognized = None #dict: unrecognized tags
     
     def __init__(self, response):
@@ -37,15 +36,20 @@ class Response_Data():
     def assign_data(self):
         """assigns IPQ_Data attributes from flattened dict"""
         discard_tags, broken = break_out_dict(self.resp_dict)
-        
+        attribs = {}
         #assign attributes
         for tag in RESPONSE_TAGS:
             if tag in broken.keys():
-                self.__dict__[tag] = broken.pop(tag)
-                self.fields.append(tag)
+                attribs[tag] = broken.pop(tag)
         
+        self.attribs = attribs
         self.unrecognized = broken
         self.discarded_tags = discard_tags
+    
+    def to_dict(self):
+        """returns dict of response data"""
+        return self.attribs
+        
     
         
     
