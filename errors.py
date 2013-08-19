@@ -1,5 +1,5 @@
 """Contains custom error classes."""
-from constants import CATEGORIES
+from constants import CATEGORIES, HTTP_RESPONSES
 
 class InvalidProxy(Exception):
     def __init__(self, arg='suppled.'): self.arg=arg
@@ -51,6 +51,24 @@ class PUTArgument(Exception):
     def __str__(self):
         return repr("Option only valid for PUT requests.")
 
-class UnrecognizedResponse(Exception):        
+class UnrecognizedResponse(Exception):
+    def __init__(self, response = ''):
+        if len(response) > 0:
+            self.response = response
+        else:
+            self.response = None
     def __str__(self):
-        return repr("Unable to recognize response as XML or JSON.")
+        if self.response:
+            return repr("Unable to recognize response as XML or JSON. Response: %s" % self.response)
+        else:
+            return repr("Unable to recognize response as XML or JSON.")
+
+class RequestNotSent(Exception):
+    def __str__(self):
+        return repr("IPViking.responsedata field is not assigned yet. IPViking.execute() has not been called or was not successful.")
+
+class HttpReturned(Exception):
+    def __init__(self, code):
+        self.code = code
+    def __str__(self):
+        return repr("Http response received instead of XML or JSON. HTTP code %s:%s." % (self.code, HTTP_RESPONSES[self.code]))

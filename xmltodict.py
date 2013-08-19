@@ -136,16 +136,16 @@ def parse(xml_input, encoding='utf-8', expat=expat, *args, **kwargs):
 
     Simple example::
 
-        >>> doc = xmltodict.parse(\"\"\"
-        ... <a prop="x">
-        ...   <b>1</b>
-        ...   <b>2</b>
-        ... </a>
-        ... \"\"\")
-        >>> doc['a']['@prop']
-        u'x'
-        >>> doc['a']['b']
-        [u'1', u'2']
+        # >>> doc = xmltodict.parse(\"\"\"
+        # ... <a prop="x">
+        # ...   <b>1</b>
+        # ...   <b>2</b>
+        # ... </a>
+        # ... \"\"\")
+        # >>> doc['a']['@prop']
+        # u'x'
+        # >>> doc['a']['b']
+        # [u'1', u'2']
 
     If `item_depth` is `0`, the function returns a dictionary for the root
     element (default behavior). Otherwise, it calls `item_callback` every time
@@ -159,37 +159,37 @@ def parse(xml_input, encoding='utf-8', expat=expat, *args, **kwargs):
 
     Streaming example::
 
-        >>> def handle(path, item):
-        ...     print 'path:%s item:%s' % (path, item)
-        ...     return True
-        ...
-        >>> xmltodict.parse(\"\"\"
-        ... <a prop="x">
-        ...   <b>1</b>
-        ...   <b>2</b>
-        ... </a>\"\"\", item_depth=2, item_callback=handle)
-        path:[(u'a', {u'prop': u'x'}), (u'b', None)] item:1
-        path:[(u'a', {u'prop': u'x'}), (u'b', None)] item:2
+        # >>> def handle(path, item):
+        # ...     print 'path:%s item:%s' % (path, item)
+        # ...     return True
+        # ...
+        # >>> xmltodict.parse(\"\"\"
+        # ... <a prop="x">
+        # ...   <b>1</b>
+        # ...   <b>2</b>
+        # ... </a>\"\"\", item_depth=2, item_callback=handle)
+        # path:[(u'a', {u'prop': u'x'}), (u'b', None)] item:1
+        # path:[(u'a', {u'prop': u'x'}), (u'b', None)] item:2
 
     The optional argument `postprocessor` is a function that takes `path`, `key`
     and `value` as positional arguments and returns a new `(key, value)` pair
     where both `key` and `value` may have changed. Usage example::
 
-        >>> def postprocessor(path, key, value):
-        ...     try:
-        ...         return key + ':int', int(value)
-        ...     except (ValueError, TypeError):
-        ...         return key, value
-        >>> xmltodict.parse('<a><b>1</b><b>2</b><b>x</b></a>',
-        ...                 postprocessor=postprocessor)
-        OrderedDict([(u'a', OrderedDict([(u'b:int', [1, 2]), (u'b', u'x')]))])
+        # >>> def postprocessor(path, key, value):
+        # ...     try:
+        # ...         return key + ':int', int(value)
+        # ...     except (ValueError, TypeError):
+        # ...         return key, value
+        # >>> xmltodict.parse('<a><b>1</b><b>2</b><b>x</b></a>',
+        # ...                 postprocessor=postprocessor)
+        # OrderedDict([(u'a', OrderedDict([(u'b:int', [1, 2]), (u'b', u'x')]))])
 
     You can pass an alternate version of `expat` (such as `defusedexpat`) by
     using the `expat` parameter. E.g:
 
-        >>> import defusedexpat
-        >>> xmltodict.parse('<a>hello</a>', expat=defusedexpat.pyexpat)
-        OrderedDict([(u'a', u'hello')])
+        # >>> import defusedexpat
+        # >>> xmltodict.parse('<a>hello</a>', expat=defusedexpat.pyexpat)
+        # OrderedDict([(u'a', u'hello')])
 
     """
     handler = _DictSAXHandler(*args, **kwargs)

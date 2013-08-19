@@ -48,7 +48,7 @@ def validateRequest(args, verb):
     for param, value in args.items():
         if param not in PARAM_CHECKS.keys() and DROP_INVALID == False:
             success = False
-            errors.append(UnrecognizedArgument())
+            errors.append(UnrecognizedArgument(param))
         else:
             succ, error = PARAM_CHECKS[param](value, verb)
             if not succ:

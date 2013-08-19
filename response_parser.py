@@ -1,14 +1,12 @@
 """Contains the classes built from an ipq response"""
-import xmltodict
-import json
+from xmltodict import parse
+from json import loads
 from collections import OrderedDict
 from constants import RESPONSE_TAGS
-from errors import UnrecognizedResponse
+from errors import UnrecognizedResponse, HttpReturned
+from sys import stdout
 
-def prep_response(response):
-    """preps response for Response_Data creation"""
-
-class Response_Data():
+class ResponseData():
     """Data structure built from IPQ response. Attributes assigned directly from response."""
     response = None #string: raw response
     resp_dict = None #dict: response processed into layered dict
@@ -16,6 +14,7 @@ class Response_Data():
     
     def __init__(self, response):
         self.response = response
+        stdout.write(response)
         self.fields = []
         self.pick_and_parse()
         self.assign_data()
@@ -27,11 +26,14 @@ class Response_Data():
     def pick_and_parse(self):
         """picks the parser type to use"""
         if '<?xml' in self.response:
-            self.resp_dict = xmltodict.parse(self.response)
+            self.resp_dict = parse(self.response)
         elif self.response[0]=='{':
-            self.resp_dict = json.loads(self.response)
+            self.resp_dict = loads(self.response)
+        elif self.response[:14]=="<!DOCTYPE HTML":
+            httpcode = self.response.split("<title>",1)[1].rsplit("/title")[0]
+            raise HttpReturned(httpcode)
         else:
-            raise UnrecognizedResponse()
+            raise UnrecognizedResponse(self.response)
     
     def assign_data(self):
         """assigns IPQ_Data attributes from flattened dict"""

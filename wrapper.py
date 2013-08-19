@@ -2,21 +2,22 @@
 from urlparse import urlparse
 from request_validator import validateRequest
 import requests
-from errors import InvalidProxy, InvalidVerb
+from errors import InvalidProxy, InvalidVerb, RequestNotSent
 from constants import SANDBOX_APIKEY, PROXY_SANDBOX
-from response_parser import Response_Data
-    
-REQUEST_TYPES = {"GET":requests.get,
-                 "POST":requests.post,
-                 "PUT":requests.put,
-                 "DELETE":requests.delete
-                 }
-                    
+from response_parser import ResponseData
+
+REQUEST_TYPES = {'GET':requests.get,
+                 'POST':requests.post,
+                 'PUT':requests.put,
+                 'DELETE':requests.delete}
+
+
 class IPViking():
     """class for outgoing API calls to IPViking"""
     def __init__(self, config = None, verb = 'POST', args = {}):
         self.config = config
         self.args = args
+        self.ip = args['ip']
         self.parse_config()
         self.verb = verb
         self.validate_config()
@@ -67,21 +68,27 @@ class IPViking():
         if succ:
             return args
         else:
-            raise Exception(''.join([str(error) for error in errors], ';   '))
-        
+            raise Exception(';   '.join([str(error) for error in errors]))
+
     def execute(self):
         """makes the request"""
         self.validate_config()
         cleaned_args = self.validate_args()
         response = REQUEST_TYPES[self.verb](self.proxy, data=cleaned_args)
-        headers = response.headers
-        content = response.content
-        data = Response_Data(content)
+        self.headers = response.headers
+        self.content = response.content
+        data = ResponseData(self.content)
         self.responsedata = data
-        self.responseheader = headers
-        self.responsecontent = content
         return True
     
     def get_dict(self):
+        if not self.responsedata:
+            raise RequestNotSent()
         return self.responsedata.to_dict()
-        
+
+    def get_headers(self):
+        return self.headers
+
+    
+               
+               
