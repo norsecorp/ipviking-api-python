@@ -25,12 +25,12 @@ def debugPrint(message):
 
 class IPViking(object):
     """class for outgoing API calls to IPViking"""
-    def __init__(self, config = None, verb = 'POST', args = {}):
+    def __init__(self, config = None, args = {}):
         self.args = {}
         self.config = self.parse_config(config)
         self.responses = []
         if 'ip' in self.args.keys():
-            self.data.append(self.execute(args))
+            return True, self.execute(args)
     
     def parse_config(self, config):
         """parses config"""
@@ -123,12 +123,12 @@ class IPViking(object):
                                                     headers = {'Accept':self.args['output']})
         
         #create ResponseData object (parses at initialization)
-        data = ResponseData(response)
+        response = ResponseData(response)
         
         #append the response to our IPViking object
-        self.responses.append(data)
+        self.responses.append(response)
         
-        return True, data
+        return True, response.data
     
                
                

@@ -17,9 +17,6 @@ constants.py
 errors.py
 -just contains exception classes. Nothing to see here.
 
-request_validator.py
--contains rules for validating options handed to a request. Called from wrapper.py
-
 response_parser.py
 -parses the returned content into a dict, and throws an exception on bad responses.
 
@@ -32,11 +29,10 @@ response, and allows you to call a dict of the response information.
   -IPViking object
     -initialized with 
       -config: contains parameters. can be .ini, dict, or list of 2-tuples. Defaults to sandbox.
-      -verb: String. HTTP verb. GET, POST, PUT, and DELETE are supported.
-      -args: Dict. Keys should be from the parameters list in constants.
-    -.execute():
+      -args: args are parameters for an individual request. Overwrites values from config.
+      -if args contains all necessary data for a request, initialization will send a single request and return the results of execute
+    -.execute(args):
+      -takes args (parameters for a single request, overwrites config values)
       -Sends the request and processes the data coming back.
-      -assigns the response header, content, and a dict of the information from the response back to the parent object
-    -.get_dict():
-      -returns parsed dict of information from a response. Calling this prior to calling .execute() will raise an error.
-	-for more data, look at the ResponseData object- it includes unrecognized information.
+      -appends the parsed response data to IPViking.data
+      -returns success boolean and dict parsed from response
