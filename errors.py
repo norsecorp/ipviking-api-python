@@ -40,15 +40,11 @@ class InvalidCategory(Exception):
     def __str__(self):
         return repr("Invalid category number %s. Valid categories are %s." % (self.arg, ''.join(CATEGORIES)))
 
-class InvalidOption(Exception):        
+class InvalidArgument(Exception):        
     def __init__(self, arg): self.arg = arg 
     def __str__(self):
-        return repr("Invalid option.")
+        return repr("Invalid argument %s." % self.arg)
 
-class InvalidMethod(Exception):        
-    def __init__(self, arg): self.arg = arg 
-    def __str__(self):
-        return repr("Invalid method %s. Valid methods: ")
 
 class PUTArgument(Exception):        
     def __init__(self, arg): self.arg = arg 
@@ -75,4 +71,5 @@ class HttpReturned(Exception):
     def __init__(self, code):
         self.code = code
     def __str__(self):
-        return repr("Http response received instead of XML or JSON. HTTP code %s:%s." % (self.code, HTTP_RESPONSES[self.code]))
+        return repr("Http response received instead of XML or JSON. HTTP code %s:%s." % (self.code, HTTP_RESPONSES[self.code[:3]]))
+    

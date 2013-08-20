@@ -1,8 +1,12 @@
 """Project constants. Can be used to configure API."""
-
+from sys import stdout
 #run settings
 DROP_ARGS = True
-DEBUG = False
+DEBUG = True
+
+def debugPrint(message):
+    if DEBUG:
+        stdout.write(message)
 
 #for requests
 PROXY_UNIVERSAL    = 'http://api.ipviking.com/api/'
@@ -78,9 +82,6 @@ METHODS = ['submission',
            'riskfactor',
            'geofilter',
            'geomatch']
-
-ARG_CHECKS = {'method':lambda arg: True if arg in METHODS else False,
-              'options':lambda arg: True if arg in OPTIONS else False}
 
 
 #response stuff

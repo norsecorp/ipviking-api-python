@@ -36,3 +36,7 @@ response, and allows you to call a dict of the response information.
       -Sends the request and processes the data coming back.
       -appends the parsed response data to IPViking.data
       -returns success boolean and dict parsed from response
+      
+    
+NOTES:
+functionality tested for ipq, risk, riskfactor, and submission. geofilter returns 'null'

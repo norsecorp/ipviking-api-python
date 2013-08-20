@@ -2,22 +2,33 @@
 from urlparse import urlparse
 import requests
 from sys import stdout
-from errors import InvalidProxy, InvalidApikey, MissingArgument, UnrecognizedArgument
+from errors import InvalidProxy, InvalidApikey, MissingArgument, UnrecognizedArgument, InvalidArgument
 from response_parser import ResponseData
-from timeit import Timer
 from constants import (SANDBOX_APIKEY, 
                        PROXY_SANDBOX,
                        REQUIRED_CONFIG, 
-                       REQUIRED_PARAMS, 
                        ALL_PARAMS, 
                        DROP_ARGS,
-                       ARG_CHECKS,
-                       DEBUG)
+                       DEBUG,
+                       METHODS,
+                       OPTIONS)
 
 REQUEST_TYPES = {'GET':requests.get,
                  'POST':requests.post,
                  'PUT':requests.put,
                  'DELETE':requests.delete}
+def ip_check(args):
+    if args.get('method') not in ['riskfactor', 'geofilter']:
+        ip = args.get('ip')
+        if not ip:            
+            return (False, MissingArgument('ip'))
+        if not len(ip.split('.')) == 4 or False in [lambda x: x.is_digit() and 0<=int(x)<256 for x in ip.split('.')]:
+            return (False, InvalidArgument('ip'))
+    return (True, None)
+
+ARG_CHECKS = {'method':lambda args: (True, None) if args.get('method') in METHODS else (False, InvalidArgument('method')),
+              'options':lambda args: (True, None) if args.get('options') in OPTIONS else (False, InvalidArgument('options')), 
+              'ip':ip_check}
 
 def debugPrint(message):
     if DEBUG:
@@ -78,18 +89,18 @@ class IPViking(object):
         #check args and move to cleaned
         for arg, val in args.items():
             if arg in ALL_PARAMS:
-                if not ARG_CHECKS.get(arg) or ARG_CHECKS[arg](val):
+                if not ARG_CHECKS.get(arg):
+                    cleaned_args[arg] = val                
+                elif ARG_CHECKS[arg](args)[0]:
                     cleaned_args[arg] = val
+                elif not ARG_CHECKS[arg](args)[0]:
+                    success = False
+                    errors.append(ARG_CHECKS[arg](args)[1])
             else:
                 if not DROP_ARGS:
-                    raise UnrecognizedArgument(arg)
-        
-        #check required args:
-        for arg in REQUIRED_PARAMS:
-            if not arg in args:
-                success = False
-                errors.append(str(MissingArgument[arg]))
-        
+                    success = False 
+                    errors.append(UnrecognizedArgument(arg))
+                
         #add needed arguments
         if not 'method' in cleaned_args:
             cleaned_args['method'] = 'ipq'
@@ -128,7 +139,7 @@ class IPViking(object):
         #append the response to our IPViking object
         self.responses.append(response)
         
-        return True, response.data
+        return True, response
     
                
                

@@ -3,6 +3,7 @@ from xmltodict import parse
 from ast import literal_eval
 from collections import OrderedDict
 from errors import UnrecognizedResponse, HttpReturned
+from constants import debugPrint
 
 class ResponseData(object):
     """Data structure built from IPQ response. Attributes assigned directly from response."""
@@ -10,6 +11,8 @@ class ResponseData(object):
     def __init__(self, response):
         self.headers = response.headers
         self.content = response.content
+        debugPrint("Request: \n"+'\n'.join(["%s: %s" % (key, val) for key, val in response.request.headers.items()])+'\n'+str(response.request.body)+"\n\n")
+        debugPrint("Response: \nStatus Code: %i\n" %response.status_code+'\n'.join(["%s: %s" % (key, val) for key, val in response.request.headers.items()])+"\n"+str(response.text)+"\n\n")
         self.data = self.assign_data(self.pick_and_parse())
         
     def pick_and_parse(self):
@@ -19,24 +22,33 @@ class ResponseData(object):
         elif self.content[0]=='{':
             return literal_eval(self.content)
         elif self.content[:14]=="<!DOCTYPE HTML":
-            httpcode = self.response.split("<title>",1)[1].rsplit("/title")[0]
-            return HttpReturned(httpcode)
+            httpcode = self.content.split("<title>",1)[1].rsplit("/title")[0]
+            return HttpReturned(httpcode)            
         else:
-            return UnrecognizedResponse(self.response)
+            return UnrecognizedResponse(self.content)
     
     def assign_data(self, parsed):
         """assigns IPQ_Data attributes from flattened dict"""
-        discard_tags, broken = break_out_dict(parsed)
-        data = {'discarded':discard_tags}
-
-        #handle empty response case
-        if not broken:
-            data['data'] = None
-            return data
+        if isinstance(parsed, HttpReturned):
+            return {'HttpResponse':str(parsed)}
+        if isinstance(parsed, UnrecognizedResponse):
+            return {"UnrecognizedResponse":str(parsed)}     
         
+        
+        discard_tags, broken = break_out_dict(parsed)
+        data = {'discarded_tags':discard_tags}
+
         #assign keys and values
-        for key, val in broken.items():
-            data[key] = val
+        if not broken or broken == 'null':
+            pass
+        
+        elif isinstance(broken, list):
+            for item in broken:
+                data[item.get('risk_attribute')] = item
+        
+        elif isinstance(broken, dict):
+            for key, val in broken.items():
+                data[key] = val
             
         return data
  
