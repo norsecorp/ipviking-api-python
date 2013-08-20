@@ -1,78 +1,74 @@
-"""Contains the classes built from an ipq response"""
+"""Contains the classes built from a response"""
 from xmltodict import parse
-from json import loads
+from ast import literal_eval
 from collections import OrderedDict
-from constants import RESPONSE_TAGS
 from errors import UnrecognizedResponse, HttpReturned
-from sys import stdout
 
-class ResponseData():
+class ResponseData(object):
     """Data structure built from IPQ response. Attributes assigned directly from response."""
-    response = None #string: raw response
-    resp_dict = None #dict: response processed into layered dict
-    unrecognized = None #dict: unrecognized tags
     
     def __init__(self, response):
-        self.response = response
-        stdout.write(response)
-        self.fields = []
-        self.pick_and_parse()
-        self.assign_data()
-        
-    def __repr__(self):
-        return str(self.__dict__)
-        
+        self.headers = response.headers
+        self.content = response.content
+        self.data = self.assign_data(self.pick_and_parse())
         
     def pick_and_parse(self):
         """picks the parser type to use"""
-        if '<?xml' in self.response:
-            self.resp_dict = parse(self.response)
-        elif self.response[0]=='{':
-            self.resp_dict = loads(self.response)
-        elif self.response[:14]=="<!DOCTYPE HTML":
+        if '<?xml' in self.content:
+            return parse(self.content)
+        elif self.content[0]=='{':
+            return literal_eval(self.content)
+        elif self.content[:14]=="<!DOCTYPE HTML":
             httpcode = self.response.split("<title>",1)[1].rsplit("/title")[0]
-            raise HttpReturned(httpcode)
+            return HttpReturned(httpcode)
         else:
-            raise UnrecognizedResponse(self.response)
+            return UnrecognizedResponse(self.response)
     
-    def assign_data(self):
+    def assign_data(self, parsed):
         """assigns IPQ_Data attributes from flattened dict"""
-        discard_tags, broken = break_out_dict(self.resp_dict)
-        attribs = {}
-        #assign attributes
-        for tag in RESPONSE_TAGS:
-            if tag in broken.keys():
-                attribs[tag] = broken.pop(tag)
+        discard_tags, broken = break_out_dict(parsed)
+        data = {'discarded':discard_tags}
+
+        #handle empty response case
+        if not broken:
+            data['data'] = None
+            return data
         
-        self.attribs = attribs
-        self.unrecognized = broken
-        self.discarded_tags = discard_tags
-    
-    def to_dict(self):
-        """returns dict of response data"""
-        return self.attribs
-        
-    
-        
-    
-    
-        
-        
-        
+        #assign keys and values
+        for key, val in broken.items():
+            data[key] = val
+            
+        return data
+ 
 def break_out_dict(d):
     """removes unnecessary layers from a nested dict"""
+    if not (isinstance(d, list) or isinstance(d, dict) or isinstance(d, OrderedDict)):
+        return [], d
     layered = True
     layer_keys = []
     while layered:
-        if len(d) == 1:
-            # this layer is unnecessary
-            if isinstance(d, list):
-                #break out the list first
-                d = d[0]
-                continue
-            key = d.keys()[0]
-            layer_keys.append(key)
-            d = d[key]
+        if isinstance(d, list):
+            d = filter(lambda x: x!=None, d)
+            if len(d) == 1:
+                #layer is unnecesary
+                layer_keys.append('list')
+                d=d[0]
+            else:
+                layered = False
+        elif isinstance(d, dict):
+            if len(d.keys()) == 1:
+                # this layer is unnecessary
+                layer_keys.append(d.keys()[0])
+                d=d.values()[0]
+            else:
+                layered = False
+        elif isinstance(d, OrderedDict):
+            if len(d.keys()) == 1:
+                # this layer is unnecessary
+                layer_keys.append(d.keys()[0])
+                d=d.values()[0]
+            else:
+                layered = False
         else:
             layered = False
     return layer_keys, d

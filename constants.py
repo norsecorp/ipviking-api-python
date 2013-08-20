@@ -1,5 +1,9 @@
 """Project constants. Can be used to configure API."""
 
+#run settings
+DROP_ARGS = True
+DEBUG = False
+
 #for requests
 PROXY_UNIVERSAL    = 'http://api.ipviking.com/api/'
 PROXY_NORTHAMERICA = 'http://us.api.ipviking.com/api/'
@@ -10,15 +14,15 @@ PROXY_SANDBOX      = 'http://beta.ipviking.com/api/'
 
 SANDBOX_APIKEY = '8292777557e8eb8bc169c2af29e87ac07d0f1ac4857048044402dbee06ba5cea'
 
-DROP_INVALID = True
+REQUIRED_CONFIG = ['apikey',
+                   'proxy']
 
-REQUIRED_PARAMS = ['apikey',
-                   'method',
-                   'ip']
+REQUIRED_PARAMS = ['ip']
 
-ALL_PARAMS = ['apikey', #Required. API Key provided by Norse.
-              'method', #Required. Norse access method (eg ipq, submission, etc).
-              'ip', #Required. IP address.
+ALL_PARAMS = ['ip', #Required. IP address.
+              'apikey', #Required. API Key provided by Norse. Overwrite for apikey provided in config.
+              'method', #Required. Defaults to ipq.
+              'verb', #Required. Defaults to POST except if method is submission; then default is PUT
               'transID', #Optional. User-supplied transaction ID for client-side processing.
               'clientID', #Optional. User-supplied client ID for client-side processing.
               'customID', #Optional. User-supplied custom ID for client-side processing.
@@ -74,6 +78,9 @@ METHODS = ['submission',
            'riskfactor',
            'geofilter',
            'geomatch']
+
+ARG_CHECKS = {'method':lambda arg: True if arg in METHODS else False,
+              'options':lambda arg: True if arg in OPTIONS else False}
 
 
 #response stuff

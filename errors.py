@@ -1,8 +1,12 @@
 """Contains custom error classes."""
 from constants import CATEGORIES, HTTP_RESPONSES
 
+class NoAddressSupplied():
+    def __str__(self):
+        return repr("No address supplied. Required arguments: apikey, ip address.")
+
 class InvalidProxy(Exception):
-    def __init__(self, arg='suppled.'): self.arg=arg
+    def __init__(self, arg='supplied.'): self.arg=arg
     def __str__(self):
         return repr("Invalid proxy location %s" % self.arg)
     
@@ -21,7 +25,7 @@ class UnrecognizedArgument(Exception):
     def __str__(self):
         return repr("Unrecognized argument %s. Check documentation for valid arguments." % self.arg)
                 
-class InvalidKeyLength(Exception):        
+class InvalidApikey(Exception):        
     def __init__(self, arg): self.arg = arg 
     def __str__(self):
         return repr("Invalid API key. API keys are 64-character strings.")
