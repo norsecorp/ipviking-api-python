@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 "Makes working with XML feel like you are working with JSON"
-"Note: This is not my library. It belongs to Martin Blech of https://github.com/martinblech/xmltodict"
+"Note: This is not our library. Kudos go to Martin Blech of https://github.com/martinblech/xmltodict"
 
 from xml.parsers import expat
 from xml.sax.saxutils import XMLGenerator

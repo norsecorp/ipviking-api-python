@@ -1,12 +1,10 @@
 """contains a library of tests for this API"""
 from wrapper import IPViking
-from constants import PROXY_SANDBOX
 from pprint import pprint
-from cStringIO import StringIO
 import timeit
 import time
 
-GEOFILTERXML = StringIO("""<?xml version=1.0?>
+GEOFILTERXML = """<?xml version=1.0?>
 <ipviking>
         <geofilter>
                 <filters>
@@ -30,7 +28,7 @@ GEOFILTERXML = StringIO("""<?xml version=1.0?>
                         <zip>13601</zip>
                 </filters>
         </geofilter>
-</ipviking>""")
+</ipviking>"""
 
 RISKFACTORXML = """<ipviking>
         <settings>
@@ -55,29 +53,45 @@ RISKFACTORXML = """<ipviking>
         </settings>
 </ipviking>"""
 
-PARAMS = {"ipq":{'method':'ipq', 'apikey':'bac03485550e8fa1f2c1aca58d4947cac7942326d81265d9e0dcbf41c04787a9', 'ip':'208.74.76.5'},
-          "risk":{'method':'risk', 'apikey':'bac03485550e8fa1f2c1aca58d4947cac7942326d81265d9e0dcbf41c04787a9', 'ip':'208.74.76.5'},
-          "submission":{'method':'submission','apikey':'bac03485550e8fa1f2c1aca58d4947cac7942326d81265d9e0dcbf41c04787a9','ip':'67.13.46.123','category':'7','protocol':'51','timestamp':str(int(time.time()))},
-          "riskfactor":{'method':'riskfactor', 'apikey':'bac03485550e8fa1f2c1aca58d4947cac7942326d81265d9e0dcbf41c04787a9', 'settingsxml':RISKFACTORXML},
-          "geofilter":{'method':'geofilter', 'apikey':'bac03485550e8fa1f2c1aca58d4947cac7942326d81265d9e0dcbf41c04787a9', 'geofilterxml':GEOFILTERXML}
+PARAMS = {"ipq":{'method':'ipq', 'ip':'208.74.76.5'},
+          "risk":{'method':'risk', 'apikey':'8292777557e8eb8bc169c2af29e87ac07d0f1ac4857048044402dbee06ba5cea', 'ip':'216.38.154.18'},
+          "submission":{'method':'submission','apikey':'8292777557e8eb8bc169c2af29e87ac07d0f1ac4857048044402dbee06ba5cea','ip':'67.13.46.123','category':'7','protocol':'51','timestamp':str(int(time.time()))},
+          "riskfactor":{'method':'riskfactor', 'apikey':'8292777557e8eb8bc169c2af29e87ac07d0f1ac4857048044402dbee06ba5cea', 'settingsxml':RISKFACTORXML},
+          "geofilter":{'method':'geofilter', 'apikey':'8292777557e8eb8bc169c2af29e87ac07d0f1ac4857048044402dbee06ba5cea', 'geofilterxml':GEOFILTERXML}
           }
 
-def testmethod(method):
-    config = {'apikey':'bac03485550e8fa1f2c1aca58d4947cac7942326d81265d9e0dcbf41c04787a9', 'proxy':'http://labs.ipviking.com/api/'}
-    params = PARAMS.get(method)
+TEST_CONFIG = {'apikey':'8292777557e8eb8bc169c2af29e87ac07d0f1ac4857048044402dbee06ba5cea', 'proxy':'api.ipviking.com'}
+LOCAL_CONFIG = {'apikey':'8292777557e8eb8bc169c2af29e87ac07d0f1ac4857048044402dbee06ba5cea', 'proxy':'localhost:15000'}
 
-    ip = IPViking(config=config)
-    success, response = ip.execute(params)
-    if success:
-        pprint(response.data)
+def testmethod(method):
+
+    ip = IPViking(config=TEST_CONFIG)
+    
+    if method == 'all':
+        for method, param in PARAMS.items():
+            print "METHOD: "+method
+            success, data = ip.execute(param)
+            print str(success)
+            pprint(data)
+
     else:
-        print type(response)
+        param = PARAMS.get(method)
+        success, data = ip.execute(param)
+        print str(success)+': '+str(data)
+        pprint(data)
+
         
-def time_test():
-    t=timeit.Timer("ip.execute(args={'method':'ipq', 'apikey':'bac03485550e8fa1f2c1aca58d4947cac7942326d81265d9e0dcbf41c04787a9', 'ip':'208.74.76.5'})", "from wrapper import IPViking\nip=IPViking(config={'apikey':'bac03485550e8fa1f2c1aca58d4947cac7942326d81265d9e0dcbf41c04787a9', 'proxy':'http://beta.ipviking.com/api/'})\n")
-    print t.repeat(10,10)
+def time_test(method):
+    if method == 'all':
+        for method, param in PARAMS.items():
+            print "METHOD: %s\n" % method
+            t=timeit.Timer("ip.execute(args=%s)" % str(param), "from wrapper import IPViking\nip=IPViking(config=%s)" % TEST_CONFIG)
+            print t.repeat(10,10)
+    else:
+        t=timeit.Timer("ip.execute(args= %s)" % str(PARAMS.get(method)), "from wrapper import IPViking\nip=IPViking(config={'apikey':'bac03485550e8fa1f2c1aca58d4947cac7942326d81265d9e0dcbf41c04787a9', 'proxy':'http://beta.ipviking.com/api/'})\n")
+        print t.repeat(10,10)
     
 if __name__=='__main__':
-    testmethod("geofilter")
+    testmethod('all')
     
 

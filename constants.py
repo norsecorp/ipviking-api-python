@@ -1,73 +1,41 @@
 """Project constants. Can be used to configure API."""
-from sys import stdout
+import time
 #run settings
 DROP_ARGS = True
-DEBUG = True
+DEBUG = False
 
-def debugPrint(message):
-    if DEBUG:
-        stdout.write(message)
+PROXIES = {'UNIVERSAL':'api.ipviking.com',
+            'NORTHAMERICA':'us.api.ipviking.com',
+            'EUROPE':'eu.api.ipviking.com',
+            'ASIAPACIFIC':'as.api.ipviking.com',
+            'SOUTHAMERICA':'la.api.ipviking.com',
+            'SANDBOX':'api.ipviking.com'}
 
-#for requests
-PROXY_UNIVERSAL    = 'http://api.ipviking.com/api/'
-PROXY_NORTHAMERICA = 'http://us.api.ipviking.com/api/'
-PROXY_EUROPE       = 'http://eu.api.ipviking.com/api/'
-PROXY_ASIAPACIFIC  = 'http://as.api.ipviking.com/api/'
-PROXY_SOUTHAMERICA = 'http://la.api.ipviking.com/api/'
-PROXY_SANDBOX      = 'http://beta.ipviking.com/api/'
 
 SANDBOX_APIKEY = '8292777557e8eb8bc169c2af29e87ac07d0f1ac4857048044402dbee06ba5cea'
 
-REQUIRED_CONFIG = ['apikey',
-                   'proxy']
+DEFAULT_CONFIG = {'apikey':SANDBOX_APIKEY, 'proxy':PROXIES['SANDBOX']}
 
-REQUIRED_PARAMS = ['ip']
 
-ALL_PARAMS = ['ip', #Required. IP address.
-              'apikey', #Required. API Key provided by Norse. Overwrite for apikey provided in config.
-              'method', #Required. Defaults to ipq.
-              'verb', #Required. Defaults to POST except if method is submission; then default is PUT
-              'transID', #Optional. User-supplied transaction ID for client-side processing.
-              'clientID', #Optional. User-supplied client ID for client-side processing.
-              'customID', #Optional. User-supplied custom ID for client-side processing.
-              'address', #Optional. Street address for GeoMatch feature.
-              'city', #Optional. City for GeoMatch feature.
-              'zip', #Optional. ZIP for GeoMatch feature.
-              'state', #Optional. State for GeoMatch feature.
-              'country', #Optional. Country for GeoMatch feature.
-              'categories', #Optional. Comma-separated list of categories to filter by. Defaults to pull all entries.
-              'options', #Optional. Pipe-separated ("|") list of options for API behavior. 
-              'protocol', #Optional. For PUT requests.
-              'category', #Optional.  For PUT requests.
-              'timestamp'] #Optional. Unix timestamp for PUT requests.
+#for requests
 
-CATEGORIES = {  '1':'Explicit Content',
-                '2':'Bogon Unadv',
-                '3':'Bogon Unass',
-                '4':'Proxy',
-                '5':'Botnet',
-                '6':'Financial',
-                '7':'CyberTerrorism',
-                '8':'Identity',
-                '9':'BruteForce',
-                '10':'Cyber Stalking',
-                '11':'Arms',
-                '12':'Drugs',
-                '13':'Espionage',
-                '14':'Music Piracy',
-                '15':'Games piracy',
-                '16':'Movie piracy',
-                '17':'Publishing piracy',
-                '18':'StockMarket',
-                '19':'Hacked',
-                '20':'Information piracy',
-                '21':'High risk',
-                '22':'HTTP',
-                '31':'Malicious Site',
-                '41':'Friendly Scanning',
-                '51':'Web Attacks',
-                '61':'DATA Harvesting',
-                '71':'Global Whitelist'   }
+REQUIREDS = {'submission':['apikey', 'category','protocol','ip'],
+             'geofilter':['apikey', 'geofilterxml'],
+             'riskfactor':['apikey', 'settingsxml'],
+             'ipq':['apikey', 'ip'],
+             'risk':['apikey', 'ip']}
+
+DEFAULTS = {'apikey':SANDBOX_APIKEY,
+            'proxy':PROXIES['SANDBOX'],
+            'timestamp':str(int(time.time())),
+            'method':'ipq',
+            'output':'application/json'
+            }
+
+CATEGORIES = ['1','2','3','4','5','6','7', '8','9','10','11','12','13','14','15','16', '17','18','19','20','21', '22','31', '41','51','61', '71']
+
+PROTOCOLS = ['17','7','19','30','31','32','33','40','50','51','60','70','80','90','100','110','111','112','52','120','53','54','55','130','140','141','150','151','152','41','34']
+
 
 OPTIONS = ['noresolve',
            'url_details',
@@ -78,10 +46,8 @@ OPTIONS = ['noresolve',
 METHODS = ['submission',
            'ipq',
            'risk',
-           'blacklist',
            'riskfactor',
-           'geofilter',
-           'geomatch']
+           'geofilter',]
 
 
 #response stuff

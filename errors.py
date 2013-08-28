@@ -1,19 +1,8 @@
 """Contains custom error classes."""
-from constants import CATEGORIES, HTTP_RESPONSES
 
-class NoAddressSupplied():
+class RequestFailed(Exception):
     def __str__(self):
-        return repr("No address supplied. Required arguments: apikey, ip address.")
-
-class InvalidProxy(Exception):
-    def __init__(self, arg='supplied.'): self.arg=arg
-    def __str__(self):
-        return repr("Invalid proxy location %s" % self.arg)
-    
-class InvalidVerb(Exception):
-    def __init__(self, arg = ''): self.arg = ' '+arg if len(arg)>0 else arg
-    def __str__(self):
-        return repr("Invalid HTTP verb%s. GET, POST, PUT, and DELETE are supported." % self.arg)
+        return repr("IPViking request failed. Check your settings.")
 
 class MissingArgument(Exception):        
     def __init__(self, arg): self.arg = arg 
@@ -25,31 +14,12 @@ class UnrecognizedArgument(Exception):
     def __str__(self):
         return repr("Unrecognized argument %s. Check documentation for valid arguments." % self.arg)
                 
-class InvalidApikey(Exception):        
-    def __init__(self, arg): self.arg = arg 
-    def __str__(self):
-        return repr("Invalid API key. API keys are 64-character strings.")
-
-class InvalidIP(Exception):        
-    def __init__(self, arg): self.arg = arg 
-    def __str__(self):
-        return repr("Invalid IP address %s.")
-
-class InvalidCategory(Exception):        
-    def __init__(self, arg): self.arg = arg 
-    def __str__(self):
-        return repr("Invalid category number %s. Valid categories are %s." % (self.arg, ''.join(CATEGORIES)))
-
 class InvalidArgument(Exception):        
-    def __init__(self, arg): self.arg = arg 
+    def __init__(self, arg, val): 
+        self.arg = arg
+        self.val = val
     def __str__(self):
-        return repr("Invalid argument %s." % self.arg)
-
-
-class PUTArgument(Exception):        
-    def __init__(self, arg): self.arg = arg 
-    def __str__(self):
-        return repr("Option only valid for PUT requests.")
+        return repr("Invalid argument %s: %s" % (self.arg, self.val))
 
 class UnrecognizedResponse(Exception):
     def __init__(self, response = ''):
@@ -63,13 +33,9 @@ class UnrecognizedResponse(Exception):
         else:
             return repr("Unable to recognize response as XML or JSON.")
 
-class RequestNotSent(Exception):
+class InvalidConfig(Exception):
+    def __init__(self, conftype):
+        self.conftype = str(conftype)
     def __str__(self):
-        return repr("IPViking.responsedata field is not assigned yet. IPViking.execute() has not been called or was not successful.")
-
-class HttpReturned(Exception):
-    def __init__(self, code):
-        self.code = code
-    def __str__(self):
-        return repr("Http response received instead of XML or JSON. HTTP code %s:%s." % (self.code, HTTP_RESPONSES[self.code[:3]]))
+        return repr("You provided an invalid config %. Please provide one of: .ini-style config file, dict, list of 2-tuples, or None for defaults." % self.conftype)
     
