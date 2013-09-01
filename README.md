@@ -3,40 +3,29 @@ ipviking-api-python
 
 IPViking API for Python
 
-This API is designed to allow one to import IPViking data directly into Python as dicts. It does require the requests
-library, which is available via pip and easy_install, as well as from docs.python-requests.org.
+This API is designed to allow one to import IPViking data directly into Python as dicts. It requires no external
+libraries, though it does reference several internals such as httplib.
 
-File breakdown:
+Usage is simple, and examples can be seen in tests.tests. The request parameters are in tests.inputs, though.
 
-constants.py
--contains running constants for this module. 
- -Can be used as a config file. 
- -Shows the parameters for a request with descriptions as comments nearby. 
- -Contains the DROP_INVALID toggle, which when true drops unrecognized parameters instead of throwing an exception.
 
-errors.py
--just contains exception classes. Nothing to see here.
-
-response_parser.py
--parses the returned content into a dict, and throws an exception on bad responses.
-
-tests.py
--tests for evaluating performance of this module
-
-wrapper.py
--Here's the meat of it. This contains the IPViking class, which ingests parameters, sends the request, parses the
-response, and allows you to call a dict of the response information.
-  -IPViking object
-    -initialized with 
-      -config: contains parameters. can be .ini, dict, or list of 2-tuples. Defaults to sandbox.
-      -args: args are parameters for an individual request. Overwrites values from config.
-      -if args contains all necessary data for a request, initialization will send a single request and return the results of execute
-    -.execute(args):
-      -takes args (parameters for a single request, overwrites config values)
-      -Sends the request and processes the data coming back.
-      -appends the parsed response data to IPViking.data
-      -returns success boolean and dict parsed from response
-      
-    
-NOTES:
-functionality tested for ipq, risk, riskfactor, and submission. geofilter returns 'null'
+Here's the structural breakdown:
+	
+	wrapper.py: This module contains the IPViking class, which is used to manage calls to the service. The method to
+		use is request(args), with args being a dict of parameters for this specific request.
+	requests.py: This module validates and prepares the arguments for the request to our server.
+	responses.py: This module parses the responses from our server into a dict (leaves it a string, if it's an http document).
+	
+	helpers/
+		-constants.py: This module contains various running constants referenced throughout the package.
+		-errors.py: This module contains our error classes.
+		-util.py: This module contains utilities to help check, repair, and parse the data.
+		-xmltodict.py: This is a module by Martin Blech of https://github.com/martinblech/ used to reduce xml documents to dicts.
+		
+	tests/
+		-inputs.py: This module contains test input values for the various API methods.
+		-outputs.py: This module contains expected responses for the various API methods.
+		-tests.py: This module contains functions to test the various API methods
+		-unittests.py: UNDER CONSTRUCTION (will eventually contain tests for individual helper functions)
+		
+And that's about the shape of it! Enjoy.
