@@ -1,6 +1,5 @@
 """Contains utility functions"""
-from constants import METHODS, OPTIONS, DEBUG, PROXIES, PROTOCOLS, CATEGORIES, DEFAULT_CONFIG, DROP_ARGS
-from sys import stdout
+from constants import METHODS, OPTIONS, PROXIES, PROTOCOLS, CATEGORIES, DEFAULT_CONFIG, DROP_ARGS
 from collections import OrderedDict
 from xmltodict import parse
 from ast import literal_eval
@@ -12,10 +11,6 @@ def ip_check(ip):
     if not len(ip.split('.')) == 4 or False in [(x.isdigit() and 0<=int(x)<256) for x in ip.split('.')]:
         return False
     return True
-
-def debugPrint(message):
-    if DEBUG:
-        stdout.write(message+'\n')
 
 def configParse(conf):
     if not conf:

@@ -9,7 +9,7 @@ PROXIES = {'UNIVERSAL':'api.ipviking.com',
             'EUROPE':'eu.api.ipviking.com',
             'ASIAPACIFIC':'as.api.ipviking.com',
             'SOUTHAMERICA':'la.api.ipviking.com',
-            'SANDBOX':'api.ipviking.com'}
+            'SANDBOX':'labs.ipviking.com'}
 
 
 SANDBOX_APIKEY = '8292777557e8eb8bc169c2af29e87ac07d0f1ac4857048044402dbee06ba5cea'
