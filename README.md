@@ -13,7 +13,9 @@ Here's the structural breakdown:
 	
 	wrapper.py: This module contains the IPViking class, which is used to manage calls to the service. The method to
 		use is request(args), with args being a dict of parameters for this specific request.
-	requests.py: This module validates and prepares the arguments for the request to our server.
+	requests.py: This module validates and prepares the arguments for the request to our server. It also contains two helper 
+		functions, geofilterhelper and riskfactorhelper, which convert lists of geofilter/riskfactor arguments to an appropriate
+		xml-formatted string.
 	responses.py: This module parses the responses from our server into a dict (leaves it a string, if it's an http document).
 	
 	helpers/

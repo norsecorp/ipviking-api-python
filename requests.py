@@ -82,6 +82,14 @@ def validate_args(args, config):
     cleaned_args['method']=method
     cleaned_args['apikey']=reqargs['apikey']
     
+    #convert lists to xml strings for geofilter/xml if that input style is used
+    if method == 'geofilter' and isinstance(cleaned_args['geofilterxml'], list):
+        cleaned_args['geofilterxml'] = geofilterhelper(cleaned_args['geofilterxml'])
+    if method == 'riskfactor' and isinstance(cleaned_args['settingsxml'], list):
+        cleaned_args['settingsxml'] = riskfactorhelper(cleaned_args['settingsxml'])
+
+
+    
     #use method to determine required arguments
     for arg in REQUIREDS[method]:
         if not cleaned_args.get(arg):
