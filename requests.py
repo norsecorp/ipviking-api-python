@@ -10,18 +10,18 @@ def geofilterhelper(filters):
     outputs = []
     for filt in filters:
         fields = ['                <filters>',
-                  "<command>%s</command>" % filt.get('command', default = "add"),
-                  "<clientID>%s</clientID>" % filt.get('clientID', default = '0'),
+                  "<command>%s</command>" % filt.get('command'),
+                  "<clientID>%s</clientID>" % filt.get('clientID', '0'),
                   "<action>%s</action>" % filt.get('action'),
                   "<category>%s</category>" % filt.get('category'),
-                  "<country>%s</country>" % filt.get('country', default = ''),
-                  "<region>%s</region>" % filt.get('region', default = ''),
-                  "<city>%s</city>" % filt.get('city', default = ''),
-                  "<zip>%s</zip>" % filt.get('zip', default = '')]
+                  "<country>%s</country>" % filt.get('country',''),
+                  "<region>%s</region>" % filt.get('region', ''),
+                  "<city>%s</city>" % filt.get('city', ''),
+                  "<zip>%s</zip>" % filt.get('zip', '')]
         
          
         
-        output ='\n                        '.join(fields)+'                </filters>\n'
+        output ='\n                        '.join(fields)+'\n                </filters>\n'
         outputs.append(output)
     geoxml = "<?xml version=1.0?>\n<ipviking>\n        <geofilter>\n"+''.join(outputs)+'        </geofilter>\n</ipviking>'
     return geoxml
@@ -40,7 +40,7 @@ def riskfactorhelper(factors):
         
          
         
-        output ='\n                        '.join(fields)+'                </riskfactors>\n'
+        output ='\n                    '.join(fields)+'\n                </riskfactors>\n'
         outputs.append(output)
     riskxml = "<?xml version=1.0?>\n<ipviking>\n        <settings>\n"+''.join(outputs)+'        </settings>\n</ipviking>'
     return riskxml    

@@ -1,6 +1,17 @@
 """Contains example inputs for API calls"""
 import time
 
+GEOFILTERLIST = [{'command':'add',
+                  'clientID':'123456',
+                  'action':'Allow',
+                  'category':'Master'},
+                 {'command':'add',
+                  'clientID':'123456',
+                  'action':'Deny',
+                  'category':'zip',
+                  'country':'US',
+                  'zip':'13601'}]
+
 GEOFILTERXML = """\
 <?xml version=1.0?>
 <ipviking>
@@ -27,6 +38,20 @@ GEOFILTERXML = """\
                 </filters>
         </geofilter>
 </ipviking>"""
+
+RISKFACTORLIST = [{'command':'add',
+                   'risk_id':'1',
+                   'risk_good_value':'99',
+                   'risk_bad_value':'99'},
+                  {'command':'delete',
+                   'risk_id':'2',
+                   'risk_good_value':'99',
+                   'risk_bad_value':'99'},
+                  {'command':'add',
+                   'risk_id':'3',
+                   'risk_good_value':'-5',
+                   'risk_bad_value':'12'}
+                  ]
 
 RISKFACTORXML = """\
 <?xml version=1.0?>
