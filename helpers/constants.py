@@ -1,48 +1,48 @@
 """Project constants. Can be used to configure API."""
 import time
 #run settings
-DROP_ARGS = True
-DEBUG = False
+DROP_ARGS = True                #drops invalid or unrecognized argments when true
+DEBUG = False                   #Enables debugPrint method
 
-PROXIES = {'UNIVERSAL':'api.ipviking.com',
+#Default and debug proxy/key configurations
+PROXIES = { 'UNIVERSAL':'api.ipviking.com',
             'NORTHAMERICA':'us.api.ipviking.com',
             'EUROPE':'eu.api.ipviking.com',
             'ASIAPACIFIC':'as.api.ipviking.com',
             'SOUTHAMERICA':'la.api.ipviking.com',
-            'SANDBOX':'labs.ipviking.com'}
-
+            'SANDBOX':'beta.ipviking.com'}
 
 SANDBOX_APIKEY = '8292777557e8eb8bc169c2af29e87ac07d0f1ac4857048044402dbee06ba5cea'
 
 DEFAULT_CONFIG = {'apikey':SANDBOX_APIKEY, 'proxy':PROXIES['SANDBOX']}
 
 
-#for requests
-
-REQUIREDS = {'submission':['apikey', 'category','protocol','ip'],
+#Request parameters
+REQUIREDS = {'submission':['apikey', 'category','protocol','ip'],               #Required parameters by method
              'geofilter':['apikey', 'geofilterxml'],
              'riskfactor':['apikey', 'settingsxml'],
              'ipq':['apikey', 'ip'],
              'risk':['apikey', 'ip']}
 
-DEFAULTS = {'apikey':SANDBOX_APIKEY,
+DEFAULTS = {'apikey':SANDBOX_APIKEY,                                            #Reasonable defaults for parameters, when we have defaults
             'proxy':PROXIES['SANDBOX'],
             'timestamp':str(int(time.time())),
             'method':'ipq',
             'output':'application/json'
             }
 
-CATEGORIES = ['1','2','3','4','5','6','7', '8','9','10','11','12','13','14','15','16', '17','18','19','20','21', '22','31', '41','51','61', '71']
+CATEGORIES = ['1','2','3','4','5','6','7', '8','9','10','11','12','13','14','15','16', '17','18','19','20','21', '22','31', '41','51','61', '71']                   #A map of categories to validate riskfactor args
 
-PROTOCOLS = ['17','7','19','30','31','32','33','40','50','51','60','70','80','90','100','110','111','112','52','120','53','54','55','130','140','141','150','151','152','41','34']
+PROTOCOLS = ['17','7','19','30','31','32','33','40','50','51','60','70','80','90','100','110','111','112','52','120','53','54','55','130','140','141','150','151','152','41','34']     #a map of protocols to validate riskfactor args
 
-
+#Options for different requests. Note: some may be deprecated or not implemented.
 OPTIONS = ['noresolve',
            'url_details',
            'suppress',
            'compress',
            'haversine']
 
+#Request methods
 METHODS = ['submission',
            'ipq',
            'risk',
@@ -50,9 +50,9 @@ METHODS = ['submission',
            'geofilter',]
 
 
-#response stuff
 
-RESPONSE_TAGS = {'method':'The IPViking API request method called',
+#Response constants
+RESPONSE_TAGS = {'method':'The IPViking API request method called',                 #A map of help texts to help decipher different API responses.
                 'ip':'The IP being analyzed',
                 'host':'The host name for the IP',
                 'clientID':'The clientID value, if one was supplied in the request',
@@ -69,7 +69,7 @@ RESPONSE_TAGS = {'method':'The IPViking API request method called',
                 'entries':'A set of information for each category of behavior associated with the provided IP.',
                 'factoring':'The weight of a common set of risk factors that was used in evaluating the IP risk. See the Risk Factor table below for possible values.'}
 
-HTTP_RESPONSES = {  "200":"OK:Request accepted and data is returned (only for seal method)",
+HTTP_RESPONSES = {  "200":"OK:Request accepted and data is returned (only for seal method)",                #A map of HTTP responses for error debugging.
                     "201":"Created:Submission accepted and processed",
                     "202":"Accepted:Submission accepted and in processing queue",
                     "204":"No Content:Request successful but no data exists for the given IP",

@@ -1,6 +1,6 @@
 """This modules contains a library of expected responses to the parameters in inputs"""
 
-RESPONSES = {'geofilter' : { 0: {'action': 'Allow',
+RESPONSES = {'geofilter' : { 0: {'action': 'Allow',                 #This is the example geofilter response
                                  'category': 'City',
                                  'city': 'PONG',
                                  'clientID': '0',
@@ -37,7 +37,7 @@ RESPONSES = {'geofilter' : { 0: {'action': 'Allow',
                                  'region': '-',
                                  'zip': '-'}},
          
-             'ipq':{'clientID': 0,
+             'ipq':{'clientID': 0,                                   #This is the example ipq response
                     'customID': 0,
                     'entries':[{'category_factor': '5',
                                 'category_id': '1',
@@ -89,7 +89,7 @@ RESPONSES = {'geofilter' : { 0: {'action': 'Allow',
                      'risk_name': 'Low',
                      'timestamp': '2013-08-31T19:26:05-04:00',
                      'transID': 0},
-             'riskfactor':{  0: {'risk_attribute': 'Country Risk Factor',
+             'riskfactor':{  0: {'risk_attribute': 'Country Risk Factor',                 #This is the example riskfactor response                   
                                  'risk_bad_value': '99',
                                  'risk_good_value': '99',
                                  'risk_id': '1'},
@@ -133,7 +133,7 @@ RESPONSES = {'geofilter' : { 0: {'action': 'Allow',
                                   'risk_bad_value': '99',
                                   'risk_good_value': '-50',
                                   'risk_id': '11'}},
-             'risk':{'clientID': 0,
+             'risk':{'clientID': 0,                                                          #This is the example risk response
                      'customID': 0,
                      'details': {'asn_record_factor': '10',
                                  'asn_threat_factor': 5,

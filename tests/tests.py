@@ -6,6 +6,7 @@ from pprint import pprint
 
 PRINT_OUTPUT = True
 def printOut(success, data):
+    """Alternate to debugPrint for whole-method testing"""
     if PRINT_OUTPUT:
         pprint(success)
         pprint(data)
@@ -14,7 +15,7 @@ def printOut(success, data):
 TEST_CONFIG = {'apikey':'8292777557e8eb8bc169c2af29e87ac07d0f1ac4857048044402dbee06ba5cea', 'proxy':'beta.ipviking.com'}
 
 def testmethod(method):
-
+    """Tests a specific method, or all methods, using the parameters from tests.inputs and asserts that we receive the expected response from tests.outputs"""
     ip = IPViking(config=TEST_CONFIG)
     
     if method == 'all':

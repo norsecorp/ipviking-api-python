@@ -6,6 +6,7 @@ from ast import literal_eval
 from errors import InvalidArgument, InvalidConfig
 
 def ip_check(ip):
+    """Simple helper method to check whether or not an IP is in expected 0-255.0-255.0-255.0-255 format."""
     if not ip:            
         return False
     if not len(ip.split('.')) == 4 or False in [(x.isdigit() and 0<=int(x)<256) for x in ip.split('.')]:
@@ -13,6 +14,7 @@ def ip_check(ip):
     return True
 
 def configParse(conf):
+    """Parses config args from string filename, dict, or list"""
     if not conf:
         configs = DEFAULT_CONFIG
     elif isinstance(conf, str):
@@ -44,14 +46,16 @@ def break_out_dict(d):
         layered, d = BREAKERS[type(d)](d)
     return d
 
+#Parsing functions for different response body types
 PARSERS = {'application/xml':lambda content: break_out_dict(parse(content)),
            'application/json':lambda content: break_out_dict(literal_eval(content))}
 
+#Breakout-functions for lists, dicts, and ordered dicts.
 BREAKERS = {type([]):lambda d: (True, d[0]) if len(d) == 1 else (False, d),
             type({}):lambda d: (True, d.values()[0]) if len(d) == 1 else (False, d),
             type(OrderedDict()): lambda d: (True, d.values()[0]) if len(d) == 1 else (False, d)}
 
-
+#Basic validation checks for each request argument
 PARAMCHECKS = {'apikey':lambda arg: len(arg)==64,
                'output':lambda arg: arg in ['application/xml', 'application/json'],
                'proxy':lambda arg: arg in PROXIES.values(),

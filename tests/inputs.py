@@ -39,6 +39,7 @@ GEOFILTERXML = """\
         </geofilter>
 </ipviking>"""
 
+
 RISKFACTORLIST = [{'command':'add',
                    'risk_id':'1',
                    'risk_good_value':'99',

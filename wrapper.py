@@ -19,7 +19,9 @@ class IPViking(object):
 
     
     def request(self, args = {}):
-        """makes the request"""
+        """This is what you'll call for any request. First, we validate the arguments. Then, make the request.
+        Then get and parse the response, and return a boolean success and the parsed data. That data will be
+        either a string text/html response (usually if the request failed), or a parsed OrderedDict."""
         #clean args, make sure we've got everything we need
         reqargs, args = validate_args(args, self.config)
         

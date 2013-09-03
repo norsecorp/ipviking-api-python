@@ -46,7 +46,15 @@ def riskfactorhelper(factors):
     return riskxml    
 
 def validate_args(args, config):
-    """validates and cleans args"""
+    """Our primary way to clean and prep arguments to make a request.
+    First step is to pass them through the parameter checks from helpers.util.
+    Then we validate that we have the arguments required to make a request of this
+    type using the REQUIREDS in helpers.constants; if a required argument isn't found
+    in the arguments, we look at the config; if not found there, we try a default; if
+    there's no default, we'll throw an exception. We also populate the reqargs (request arguments)
+    here. Next we pop out our request args (proxy, apikey, method), convert geofilter/riskfactor
+    lists to xmls if lists were provided, set the HTTP Request verb (eg POST or PUT), and return
+    the request args and parameter args."""
     cleaned_args = {}
 
     #check args and move to cleaned
