@@ -40,7 +40,6 @@ class IPViking(object):
         #recreate httpconnection in case of failed request
         except (httplib.CannotSendRequest, httplib.BadStatusLine):
             self.httpc = httplib.HTTPConnection(reqargs['proxy'])   #prepare proxy and build HTTPConnection
-            self.httpc.set_debuglevel(1)
             self.httpc.request(method=reqargs['verb'], 
                               url='http://%s/api/' % reqargs['proxy'], 
                               body='&'.join(("%s=%s" % (str(key), str(val)) for key, val in args.items())), 

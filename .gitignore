@@ -2,3 +2,6 @@
 .idea/*
 .project
 .pydevproject
+dist/*
+ipviking_api_python.egg-info/*
+build/*
