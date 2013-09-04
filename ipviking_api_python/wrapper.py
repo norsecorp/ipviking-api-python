@@ -1,8 +1,8 @@
 """This is a library of classes used by this API"""
 import httplib
-from helpers.util import configParse
-from requests import validate_args
-from responses import parseResponse
+from ipviking_api_python.helpers.util import configParse
+from ipviking_api_python.requests import validate_args
+from ipviking_api_python.responses import parseResponse
 
 
 class IPViking(object):
@@ -35,9 +35,12 @@ class IPViking(object):
                                           'Content-Type':'application/x-www-form-urlencoded',
                                           'Accept-Encoding':'gzip, deflate, compress'})
         
+            response=self.httpc.getresponse()
+
         #recreate httpconnection in case of failed request
-        except httplib.CannotSendRequest:
+        except (httplib.CannotSendRequest, httplib.BadStatusLine):
             self.httpc = httplib.HTTPConnection(reqargs['proxy'])   #prepare proxy and build HTTPConnection
+            self.httpc.set_debuglevel(1)
             self.httpc.request(method=reqargs['verb'], 
                               url='http://%s/api/' % reqargs['proxy'], 
                               body='&'.join(("%s=%s" % (str(key), str(val)) for key, val in args.items())), 
@@ -45,8 +48,9 @@ class IPViking(object):
                                          'User-Agent':'python-requests/1.2.3 CPython/2.7.5 Windows/7',
                                          'Content-Type':'application/x-www-form-urlencoded',
                                          'Accept-Encoding':'gzip, deflate, compress'})
+            response=self.httpc.getresponse()
+
         #get and parse the response
-        response=self.httpc.getresponse()
         success, data  = parseResponse(response)        
         
         return success, data

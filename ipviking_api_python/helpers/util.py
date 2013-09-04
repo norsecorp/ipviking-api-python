@@ -1,9 +1,9 @@
 """Contains utility functions"""
-from constants import METHODS, OPTIONS, PROXIES, PROTOCOLS, CATEGORIES, DEFAULT_CONFIG, DROP_ARGS
+from ipviking_api_python.helpers.constants import METHODS, OPTIONS, PROXIES, PROTOCOLS, CATEGORIES, DEFAULT_CONFIG, DROP_ARGS
 from collections import OrderedDict
-from xmltodict import parse
+from ipviking_api_python.helpers.xmltodict import parse
 from ast import literal_eval
-from errors import InvalidArgument, InvalidConfig
+from ipviking_api_python.helpers.errors import InvalidArgument, InvalidConfig
 
 def ip_check(ip):
     """Simple helper method to check whether or not an IP is in expected 0-255.0-255.0-255.0-255 format."""

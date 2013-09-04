@@ -1,7 +1,7 @@
 """contains a library of tests for this API"""
-from wrapper import IPViking
-from inputs import PARAMS
-from outputs import RESPONSES
+from ipviking_api_python.wrapper import IPViking
+from ipviking_api_python.tests.inputs import PARAMS
+from ipviking_api_python.tests.outputs import RESPONSES
 from pprint import pprint
 
 PRINT_OUTPUT = True

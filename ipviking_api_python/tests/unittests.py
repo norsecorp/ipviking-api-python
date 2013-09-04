@@ -1,6 +1,6 @@
 """Contains unit tests for all our helper functions"""
-from requests import geofilterhelper, riskfactorhelper
-from inputs import RISKFACTORXML, GEOFILTERXML, RISKFACTORLIST, GEOFILTERLIST
+from ipviking_api_python.requests import geofilterhelper, riskfactorhelper
+from ipviking_api_python.tests.inputs import RISKFACTORXML, GEOFILTERXML, RISKFACTORLIST, GEOFILTERLIST
 
 def test_rfhelper():
     """Tests riskfactorhelper xml-builder function"""

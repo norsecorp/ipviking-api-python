@@ -1,7 +1,7 @@
 """contains functions to parse requests"""
-from helpers.constants import DROP_ARGS, DEFAULTS, REQUIREDS
-from helpers.util import PARAMCHECKS
-from helpers.errors import InvalidArgument, UnrecognizedArgument, MissingArgument
+from ipviking_api_python.helpers.constants import DROP_ARGS, DEFAULTS, REQUIREDS
+from ipviking_api_python.helpers.util import PARAMCHECKS
+from ipviking_api_python.helpers.errors import InvalidArgument, UnrecognizedArgument, MissingArgument
 
 def geofilterhelper(filters):
     """This field constructs a valid, IPViking-readable xml string from a list of dictionary filters.

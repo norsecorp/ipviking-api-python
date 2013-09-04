@@ -1,5 +1,5 @@
 """contains functions to parse responses"""
-from helpers.util import PARSERS, break_out_dict
+from ipviking_api_python.helpers.util import PARSERS, break_out_dict
 
 def parseResponse(response):
     """Parses data from HTTPResponse. First get the content type.
