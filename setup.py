@@ -1,6 +1,6 @@
 """Here's our handy setup script for the ipviking API"""
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
       name = 'ipviking_api_python',
@@ -9,10 +9,10 @@ setup(
       author = 'Marcus Hoffman',
       url = 'https://github.com/norsecorp/ipviking-api-python',
       license = 'BSD',
-      packages = ['ipviking_api_python', 'ipviking_api_python.helpers', 'ipviking_api_python.tests'],
+      packages = find_packages(),
       include_package_data = True,
       package_data = {'':['README.md']},
-      install_requires = ['django'],
+      install_requires = [],
       tests_require = [],
       classifiers = ['Development Status :: 1 - Beta',
                      'Intended Audience :: Developers',
