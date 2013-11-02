@@ -22,7 +22,8 @@ REQUIREDS = {'submission':['apikey', 'category','protocol','ip'],               
              'geofilter':['apikey', 'geofilterxml'],
              'riskfactor':['apikey', 'settingsxml'],
              'ipq':['apikey', 'ip'],
-             'risk':['apikey', 'ip']}
+             'risk':['apikey', 'ip'],
+             'ipview':['apikey','ip']}
 
 DEFAULTS = {'apikey':SANDBOX_APIKEY,                                            #Reasonable defaults for parameters, when we have defaults
             'proxy':PROXIES['SANDBOX'],
@@ -47,7 +48,8 @@ METHODS = ['submission',
            'ipq',
            'risk',
            'riskfactor',
-           'geofilter',]
+           'geofilter',
+           'ipview']
 
 
 
